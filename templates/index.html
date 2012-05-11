@@ -1,11 +1,21 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <script type="text/javascript" src="{{media_url}}/static/js/jquery.js"></script>
-        <script type="text/javascript" src="{{media_url}}/static/js/underscore/underscore-min.js"></script>
-        <script type="text/javascript" src="{{media_url}}/static/js/backbone/backbone.js"></script>
-        <script type="text/javascript" src="{{media_url}}/static/js/main.js"></script>
-    </head>
-    <body>
-        hello
+<head>
+    <title>One page cms</title>
+    <script src="{{ MEDIA_URL }}js/jquery.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/underscore/underscore-min.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/backbone/backbone-min.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/main.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/app_index.js" type="text/javascript"></script>
+    <script type="text/javascript">
+$(function(){
+//    var appRouter = new AppRouter({root_url:'{{ MEDIA_URL }}'});
+//    Backbone.history.start();
+})
+    </script>
+</head>
+<body>
+    <div id="body"></div>
+    <div id="templates"></div>
 </body>
 </html>

@@ -1,8 +1,6 @@
 # Create your views here.
-from django.template import Context, loader
 from django.http import HttpResponse
-def index(request):
-    t = loader.get_template('index.html')
-    c = Context({'media_url':'http://localhost:8000/cms'})
-    return HttpResponse(t.render(c))
-    
+from django.template import Context, loader
+def home(request, *args, **kwargs):
+    t = loader.get_template("templates/index.html")
+    return HttpResponse(t.render(Context({'MEDIA_URL':'/static/'})))

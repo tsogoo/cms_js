@@ -1,0 +1,18 @@
+<script type="text/template" id="template_layout_menu">
+<div class="navbar navbar-fixed-top"><div class="navbar-inner"><div class="container">
+    <a class="brand" href="#">Javascript CMS</a>
+    <ul class="nav" id="main_menu">
+        <% for(var i in menus){ %>
+        <li><a href="#<%= menus[i].url %>"><%= menus[i].label %></a>
+            <% if(menus[i].items.length){ %>
+            <ul>
+            <% for(var j in menus[i].items){ %>
+                <li><a href="#<%= menus[i].items[j].url %>"><%= menus[i].items[j].label %></a></li>
+            <% } %>
+            </ul>
+            <% } %>
+        </li>
+        <% } %>
+    </ul>
+</div></div></div>
+</script>
