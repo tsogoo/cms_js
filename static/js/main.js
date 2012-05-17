@@ -2,15 +2,14 @@
 var CMS
 CMS = this.CMS = {}
 CMS.VERSION = '0.0.1'
-    
+
 var Event = CMS.Event = {
 }
-    
     
 var View = CMS.View = function(options){
     this.initialize(options)
 }
-_.extend(View.prototype,Event,{
+_.extend(View.prototype,{
     initialize:function(options){},
         
     /*

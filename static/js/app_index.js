@@ -1,5 +1,8 @@
 var News = Backbone.Model.extend({
 })
+var NewsCollection = Backbone.Collection.extend({
+    
+})
 var NewsView = CMS.View.extend({
     params:{
         search:'',
@@ -12,6 +15,7 @@ var NewsView = CMS.View.extend({
     initialize:function(options){
         var me = this
         this.model = new News
+        this.collection = new NewsCollection
         this.alias = 'news'
         this.router = options.router
         this.root_url = options.root_url
@@ -53,6 +57,7 @@ var NewsView = CMS.View.extend({
     },
     init_model:function(options){
         this.current_action = options.action
+        this.model = 
         options.success()
     },
     render:function(options){
@@ -60,6 +65,18 @@ var NewsView = CMS.View.extend({
         $('#page_content').html(_.template($('#template_'+this.alias+'_'+this.current_action).html()))
         this.router.mainView.select_menu(1)
     },
+})
+var List = function(options) {
+    this.initialize(options)
+}
+_.extend(List.prototype,{
+    initialize:function (options){
+        this.collection = options.collection
+        this.listFields = options.fields
+    },
+    initField:function(){
+        
+    }
 })
 var MainView = CMS.View.extend ({
     initialize:function(options){
@@ -69,6 +86,9 @@ var MainView = CMS.View.extend ({
         this.run({action:'index'})
     },
     init_model:function(options){
+        this.list = new List({collection: new NewsCollection()})
+        this.list.initField = function(){alert(1)}
+        this.list.initField()
         options.success()
     },
     render:function(options){
