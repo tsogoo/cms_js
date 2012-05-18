@@ -1,0 +1,13 @@
+body {
+  padding-top:80px;
+}
+.navbar-fixed-top .container,.container{
+    width:auto;
+    padding-left:20px; padding-right:20px
+}
+.navbar-fixed-top .brand{ color:#000; float: right; font-weight:bold;
+text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
+  -webkit-transition: all .2s linear;
+     -moz-transition: all .2s linear;
+          transition: all .2s linear;
+}
