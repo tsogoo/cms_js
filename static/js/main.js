@@ -26,12 +26,11 @@ _.extend(View.prototype,{
         }, unsuccess:function(){ alert('error')}})
     },
     init_template:function(options){
-        
         if(!this.template_string){
-            
+            var me=this
             $.get(this.root_url+'templates/'+options.file_name+'.html',function(data){
-                this.template_string = data
-                $('#templates').append(this.template_string)
+                me.template_string = data
+                $('#templates').append(me.template_string)
                 options.success()
             })    
         }
@@ -41,7 +40,8 @@ _.extend(View.prototype,{
         }
     },
     init_model:function(options){
-        this.current_action = options.action
+        if(options.action)
+            this.current_action = options.action
         options.success()
     },
     render:function(options){
@@ -82,6 +82,51 @@ var extend = function (protoProps, classProps) {
     return child;
 };
 View.extend = extend
-
 }).call(this)
+var List = function(options) {
+    this.initialize(options)
+}
+_.extend(List.prototype,{
+    sort:'ordering DESC',
+    rowsPerPage:10,
+    attributes:[{name:"id"},
+        {name:"ordering", label:"Эрэмбэ",columnOption:{width:20,order:true}},
+        {name:"title", label:"Гарчиг",columnOption:{order:true,align:"left"}},
+        {name:"i_state",label:"Төлөв",columnOption:{width:20,order:true}}
+    ],
+    initialize:function (options){
+        _.extend(this,options)
+    },
+    initField:function(){
+        
+    }
+})
 
+var Filter = function(options) {
+    this.initialize(options)
+}
+_.extend(Filter.prototype,{
+    sort:'ordering DESC',
+    rowsPerPage:10,
+    attributes:{search_key:{ type:'text',options:{ placeholder:'Түлхүүр үг...'}, value:0},
+                published:{type:'radioGroup',values:{1:'Нээлттэй',0:'Хаалттай','-1':'Бүгд'}, value:-1}
+    },
+    initialize:function (options){
+        _.extend(this,options)
+        this.element = $('<form class="well form-inline"></form>')
+        for(name in this.attributes){
+            if(this.attributes['name'].type == 'text')
+        }
+    },
+    html:function(){
+        return this.element.html()
+    },
+    setValues:function(options){ //options
+        for(name in options){
+            this.attributes[name].value=options[name]
+        }
+    },
+    getElement:function(){
+        return this.element  
+    }
+})

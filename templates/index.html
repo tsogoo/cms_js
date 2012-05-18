@@ -7,14 +7,18 @@
     <script src="{{ MEDIA_URL }}js/backbone/backbone-min.js" type="text/javascript"></script>
     <script src="{{ MEDIA_URL }}js/main.js" type="text/javascript"></script>
     <script src="{{ MEDIA_URL }}js/app_index.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}bootstrap/docs/assets/js/bootstrap.js" type="text/javascript"></script>
+    <link href="{{ MEDIA_URL }}bootstrap/docs/assets/css/bootstrap.css" type="text/css" rel="stylesheet" />
+    <link href="{{ MEDIA_URL }}css/style.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript">
 $(function(){
 //    var appRouter = new AppRouter({root_url:'{{ MEDIA_URL }}'});
 //    Backbone.history.start();
+    
 })
     </script>
 </head>
-<body>
+<body data-spy="scroll" data-target=".subnav" data-offset="50">
     <div id="body"></div>
     <div id="templates"></div>
 </body>

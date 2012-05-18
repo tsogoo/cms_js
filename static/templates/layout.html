@@ -3,15 +3,17 @@
     <a class="brand" href="#">Javascript CMS</a>
     <ul class="nav" id="main_menu">
         <% for(var i in menus){ %>
-        <li><a href="#<%= menus[i].url %>"><%= menus[i].label %></a>
-            <% if(menus[i].items.length){ %>
-            <ul>
+        <% if(menus[i].items.length){ %>
+        <li class="dropdown"><a href="#<%= menus[i].url %>" class="dropdown-toggle"><%= menus[i].label %> <b class="caret"></b></a>
+            <ul class="dropdown-menu">
             <% for(var j in menus[i].items){ %>
                 <li><a href="#<%= menus[i].items[j].url %>"><%= menus[i].items[j].label %></a></li>
             <% } %>
             </ul>
-            <% } %>
         </li>
+        <% } else {%>
+        <li><a href="#<%= menus[i].url %>"><%= menus[i].label %></a></li>
+        <% }%>
         <% } %>
     </ul>
 </div></div></div>

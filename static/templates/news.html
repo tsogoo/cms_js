@@ -1,4 +1,12 @@
 <script type="text/template" id="template_news_list">
-    <input type="text" value="">
+    <h2>Mэдээ мэдээлэл</h2>
+    <div class="filter"></div>
+    <form class="well form-inline">
+        <input type="text" value="" placeholder="Түлхүүр үг…" name="search">
+        <label class="radio"><input type="radio" value="0" name="published">Нээлттэй</label>
+        <label class="radio"><input type="radio" value="1" name="published">Хаалттай</label>
+        <label class="radio"><input type="radio" value="-1" name="published">Бүгд</label>
+        <button type="button" class="btn">Шүүх...</button>
+    </form>
     <div class="list"></div>
 </script>
