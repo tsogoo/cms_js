@@ -125,10 +125,6 @@ _.extend(Filter.prototype,{
         }
     },
     getElement:function(){
-        for(name in this.attributes){
-            if(this.attributes['name'].type == 'text')
-                this.element
-        }
         return this.element  
     }
 })
