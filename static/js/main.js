@@ -114,9 +114,7 @@ _.extend(Filter.prototype,{
     initialize:function (options){
         _.extend(this,options)
         this.element = $('<form class="well form-inline"></form>')
-        for(name in this.attributes){
-            if(this.attributes['name'].type == 'text')
-        }
+        this.getElement()
     },
     html:function(){
         return this.element.html()
@@ -127,6 +125,10 @@ _.extend(Filter.prototype,{
         }
     },
     getElement:function(){
+        for(name in this.attributes){
+            if(this.attributes['name'].type == 'text')
+                this.element
+        }
         return this.element  
     }
 })
