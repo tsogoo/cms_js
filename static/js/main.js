@@ -109,11 +109,18 @@ _.extend(Filter.prototype,{
     sort:'ordering DESC',
     rowsPerPage:10,
     attributes:{search_key:{ type:'text',options:{ placeholder:'Түлхүүр үг...'}, value:0},
-                published:{type:'radioGroup',values:{1:'Нээлттэй',0:'Хаалттай','-1':'Бүгд'}, value:-1}
+                published:{type:'select',values:{1:'Нээлттэй',0:'Хаалттай','-1':'Бүгд'}, value:-1}
     },
     initialize:function (options){
         _.extend(this,options)
         this.element = $('<form class="well form-inline"></form>')
+        for(name in this.attributes){
+            if(this.attributes[name].type == 'text'){
+          //      this.attributes['name'].el = $('<input />').value(this.attributes['name'].value)
+                 
+            }
+            
+        }
         this.getElement()
     },
     html:function(){
