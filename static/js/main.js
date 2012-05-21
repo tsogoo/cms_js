@@ -47,6 +47,7 @@ _.extend(View.prototype,{
     render:function(options){
         $('#page_content').empty()
         $('#page_content').html(_.template($('#template_'+this.alias+'_'+this.current_action).html()))
+        this.select_menu()
     }
 })
     

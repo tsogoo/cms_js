@@ -10,6 +10,9 @@ var DashboardView = CMS.View.extend({
         _.extend(this, options)
         var me = this
         this.router.route("", "run", function(){me.run({})})
+    },
+    select_menu:function(){
+        this.router.mainView.select_menu(0)
     }
 })
 var NewsView = CMS.View.extend({
@@ -78,8 +81,11 @@ var NewsView = CMS.View.extend({
         $('#page_content').empty()
         $('#page_content').html(_.template($('#template_'+this.alias+'_'+this.current_action).html()))
         $('.filter').append(this.filter.element)
-        this.router.mainView.select_menu(1)
+        this.select_menu()
     },
+    select_menu:function(){
+        this.router.mainView.select_menu(1)
+    }
 })
 
 var MainView = CMS.View.extend ({
