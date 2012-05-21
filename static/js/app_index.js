@@ -69,18 +69,17 @@ var NewsView = CMS.View.extend({
     },
     init_model:function(options){
         this.list = new List({collection: new NewsCollection()})
-        this.list.initField = function(){
-            
-        }
-        this.list.initField()
-        this.current_action='list'
+        
         this.filter = new Filter({})
+        this.list.initField({filter: this.filter})
+        this.current_action='list'
+        
         options.success()
     },
     render:function(options){
         $('#page_content').empty()
         $('#page_content').html(_.template($('#template_'+this.alias+'_'+this.current_action).html()))
-        $('.filter').append(this.filter.element)
+        $('.filter').append(this.filter.form)
         this.select_menu()
     },
     select_menu:function(){

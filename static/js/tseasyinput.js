@@ -1,70 +1,51 @@
 /**
- * Copyright (c) 2011
+ *  Copyright (c) 2012
  *  Tsogoo
- **/
-(function($){
-    $.fn.extend({
-    tseasyinput : function(options) {
-        if (!$.event._dpCache) $.event._dpCache = [];
-        var defaults = {
-            emptystring : 'empty'
-            ,value      : ''
-            ,emptyclass  : 'empty'
-            ,change : function(value){}
-            
-        }
-        return this.each(function() {
-            if(options) {
-                options = $.extend(defaults, options);
-            }
-            var o   = options;
-            var obj = $(this);
-            obj.val(o.value)
-            if(trim(obj.val()) == '')
-                obj.val(o.emptystring)
-            if(obj.val() == o.emptystring){
-                obj.addClass(o.emptyclass)
-            }
-            obj.focus(function(){
-                if(trim(obj.val()) == o.emptystring){
-                    obj.val('')
-                    obj.removeClass(o.emptyclass)
-                }
-            }).blur(function(){
-                obj.val(trim(obj.val()))
-                if(obj.val() == '' || obj.val() == o.emptystring){
-                    obj.val(o.emptystring)
-                    obj.addClass(o.emptyclass)
-                }
-            }).change(function(k){
-                o.change(k)
-            })
-        });
-    }
-    })
-})(jQuery)
-function TsEasyHtml(){
+**/
+function CMSHml(){
 }
-TsEasyHtml.RadioButtonListIndex=0
-TsEasyHtml.RadioButtonList = function(name,selected_value,values,options,option){
-    var str=""
-        if(!option){
-        option={separator:' '}
+CMSHml.TextField = function(name, value, options){
+    var str='<input type="text" name="'+name+'" value="'+value+'"'
+    for(opt in options){
+        str+=' '+opt+'="'+options[opt]+'"'
     }
-    for(var val=0; val<values.length; val++){
-        TsEasyHtml.RadioButtonListIndex++
-        str+='<input type="radio" name="'+name+'" value="'+values[val].value+'" id="'+name+TsEasyHtml.RadioButtonListIndex+'"'
-        if(values[val].value == selected_value){
+    return str+ ' />'
+}
+CMSHml.HiddenField = function(name, value, options){
+    var str='<input type="hidden" name="'+name+'" value="'+value+'"'
+    for(opt in options){
+        str+=' '+opt+'="'+options[opt]+'"'
+    }
+    return str+ ' />'
+}
+CMSHml.Button = function(name, options){
+    var str='<input type="button" value="'+name+'" class="btn"'
+    for(opt in options){
+        str+=' '+opt+'="'+options[opt]+'"'
+    }
+    return str+ ' />'
+}
+CMSHml.RadioButtonList = function(name,selected_value,values,options){
+    var str=""
+    if(!options.separator){
+        options.separator = '&nbsp;'
+    }
+    for(value in values){
+        str+='<label class="radio"><input type="radio" name="'+name+'" value="'+value+'"'
+        if(value == selected_value){
             str+=' checked="checked"'
         }
-        for(opt in options){
-            str+=' '+options[opt][0]+'="'+options[opt][1]+'"'
+        if(options.length){
+            for(opt in options){
+                if(opt != 'separator')
+                    str+=' '+opt+'="'+options[opt]+'"'
+            }
         }
-        str+=' /><label for="'+name+TsEasyHtml.RadioButtonListIndex+'">'+values[val].label+'</label>'+option.separator;
+        str+=' />'+values[value]+'</label>'+options.separator;
     }
-    return $(str)
+    return str
 }
-TsEasyHtml.DropDownList = function(name,selected_value,values,options){
+CMSHml.DropDownList = function(name,selected_value,values,options){
     var str='<select name="'+name+'"'
     for(opt in options){
         if(options[opt][1] != "")

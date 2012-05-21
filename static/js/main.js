@@ -98,8 +98,8 @@ _.extend(List.prototype,{
     initialize:function (options){
         _.extend(this,options)
     },
-    initField:function(){
-        
+    initField:function(options){
+        $('.list').initGridView({},{ filter: options.filter})
     }
 })
 
@@ -109,20 +109,17 @@ var Filter = function(options) {
 _.extend(Filter.prototype,{
     sort:'ordering DESC',
     rowsPerPage:10,
-    attributes:{search_key:{ type:'text',options:{ placeholder:'Түлхүүр үг...'}, value:0},
-                published:{type:'select',values:{1:'Нээлттэй',0:'Хаалттай','-1':'Бүгд'}, value:-1}
-    },
+    elements:[
+        CMSHml.TextField('search_key','',{ placeholder:'Түлхүүр үг...'}),
+        CMSHml.RadioButtonList('published',-1,{1:'Нээлттэй',0:'Хаалттай','-1':'Бүгд'},{separator:' '})
+    ],
     initialize:function (options){
         _.extend(this,options)
-        this.element = $('<form class="well form-inline"></form>')
-        for(name in this.attributes){
-            if(this.attributes[name].type == 'text'){
-          //      this.attributes['name'].el = $('<input />').value(this.attributes['name'].value)
-                 
-            }
-            
+        this.form = $('<form class="well form-inline"></form>')
+        for(name in this.elements){
+            this.form.append(this.elements[name],' ')
         }
-        this.getElement()
+        this.form.append(CMSHml.Button('Шүүх...'))
     },
     html:function(){
         return this.element.html()
@@ -132,7 +129,7 @@ _.extend(Filter.prototype,{
             this.attributes[name].value=options[name]
         }
     },
-    getElement:function(){
-        return this.element  
+    getForm:function(){
+        return this.form  
     }
 })
