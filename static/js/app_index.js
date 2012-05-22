@@ -68,10 +68,9 @@ var NewsView = CMS.View.extend({
         }
     },
     init_model:function(options){
-        this.list = new List({collection: new NewsCollection()})
-        
         this.filter = new Filter({})
-        this.list.initField({filter: this.filter})
+        this.list = new List({collection: new NewsCollection(),filter: this.filter})
+        //this.list.initField({})
         this.current_action='list'
         
         options.success()

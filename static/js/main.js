@@ -88,8 +88,7 @@ var List = function(options) {
     this.initialize(options)
 }
 _.extend(List.prototype,{
-    sort:'ordering DESC',
-    rowsPerPage:10,
+    meta:{sort:'ordering', sort_by:'ASC', current_page:0, total:0},
     attributes:[{name:"id"},
         {name:"ordering", label:"Эрэмбэ",columnOption:{width:20,order:true}},
         {name:"title", label:"Гарчиг",columnOption:{order:true,align:"left"}},
@@ -97,9 +96,49 @@ _.extend(List.prototype,{
     ],
     initialize:function (options){
         _.extend(this,options)
+        this.filter.addElement(CMSHml.HiddenField('sort', this.meta.sort))
+        this.filter.addElement(CMSHml.HiddenField('sort_by', this.meta.sort_by))
+        this.filter.addElement(CMSHml.HiddenField('current_page', this.meta.current_page))
+        this.filter.addElement(CMSHml.HiddenField('total', this.meta.total))
     },
-    initField:function(options){
-        $('.list').initGridView({},{ filter: options.filter})
+    setData:function(options){
+        
+    },
+    setElement:function(){
+        this.table=$('<table class="table table-striped table-bordered table-condensed"></table>')
+        this.setHead()
+    },
+    setHead:function(){
+        var thead = $('<thead></thead>')
+        var row = $('<tr></tr>')
+        thead.append(row)
+        this.table.append(thead)
+        for(var j = 0; j < d.attributes.length; ++j) {
+            //  create table column and append it
+            col = $('<th></th>');
+            if(this.attributes[j].name == 'id') {
+                checkbox = $(document.createElement('input')).attr('type', 'checkbox').attr('id', 'checkAll');
+                col = $(document.createElement('th')).attr('width', 5);
+                col.append(checkbox);
+            }
+            if(d.attributes[j].columnOption) {
+                if(!d.attributes[j].columnOption.align)
+                    d.attributes[j].columnOption.align = 'center'
+                col.css('text-align', d.attributes[j].columnOption.align)
+
+                if(d.attributes[j].columnOption.order) {
+                    links = $(document.createElement('a')).attr('href', '#').html(d.attributes[j].label).attr('id', d.attributes[j].name);
+                    if(d.attributes[j].name == d.sorting[0])
+                        links.attr('class', d.sorting[1]);
+                    if(d.attributes[j].columnOption.width != '')
+                        col.attr('width', d.attributes[j].columnOption.width);
+                    col.append(links);
+                } else {
+                    col.html(d.attributes[j].label);
+                }
+            }
+            row.append(col);
+        }
     }
 })
 
@@ -121,8 +160,9 @@ _.extend(Filter.prototype,{
         }
         this.form.append(CMSHml.Button('Шүүх...'))
     },
-    html:function(){
-        return this.element.html()
+    addElement:function(element){
+        this.elements.push(element)
+        this.form.append(element)
     },
     setValues:function(options){ //options
         for(name in options){
