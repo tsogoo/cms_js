@@ -1,6 +1,11 @@
 var News = Backbone.Model.extend({
+    url:'api/news'
 })
 var NewsCollection = Backbone.Collection.extend({
+    model:News,
+    url:'api/news'
+    
+    
     
 })
 var DashboardView = CMS.View.extend({
@@ -29,7 +34,6 @@ var NewsView = CMS.View.extend({
         _.extend(this,options)
         var me = this
         this.model = new News
-        this.collection = new NewsCollection
         this.alias = 'news'
         this.router.route("news", "run", function(){me.run({action:'list'})})
         this.router.route("news/list", "run", function(){me.run({action:'list'})})
@@ -45,10 +49,11 @@ var NewsView = CMS.View.extend({
     */
     run:function(options){
         var me = this
+        this.action = options.action
         if(!options.template)
             options.template = this.alias
         this.init_template({file_name:options.template, success:function(){
-            me.init_model({ action:options.action, params:options.url_params, success:function(){
+            me.init_model({ params:options.url_params, success:function(){
                 me.render({template:options.template})
             }})
         }, unsuccess:function(){ alert('error')}})
@@ -68,17 +73,22 @@ var NewsView = CMS.View.extend({
         }
     },
     init_model:function(options){
-        this.filter = new Filter({})
-        this.list = new List({collection: new NewsCollection(),filter: this.filter})
-        //this.list.initField({})
-        this.current_action='list'
-        
+        if(this.action=='list'){
+            this.filter = new Filter({})
+            this.list = new List({collection: new NewsCollection(),filter: this.filter})
+            
+            //alert(this.list.setElement().html()) 
+        }
+        else if(this.action=='edit'){
+            
+        }
         options.success()
     },
     render:function(options){
         $('#page_content').empty()
         $('#page_content').html(_.template($('#template_'+this.alias+'_'+this.current_action).html()))
         $('.filter').append(this.filter.form)
+        $('.list').append(this.list.setElement())
         this.select_menu()
     },
     select_menu:function(){

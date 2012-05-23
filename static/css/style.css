@@ -11,3 +11,6 @@ text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
      -moz-transition: all .2s linear;
           transition: all .2s linear;
 }
+.icon-ASC{ background: url(../img/cms_icons.png) 0 0 no-repeat;}
+.icon-DESC{ background: url(../img/cms_icons.png) 0 0 no-repeat;}
+.icon-SORT{ background: url(../img/cms_icons.png) 0 0 no-repeat;}

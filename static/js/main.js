@@ -90,9 +90,9 @@ var List = function(options) {
 _.extend(List.prototype,{
     meta:{sort:'ordering', sort_by:'ASC', current_page:0, total:0},
     attributes:[{name:"id"},
-        {name:"ordering", label:"Эрэмбэ",columnOption:{width:20,order:true}},
+        {name:"ordering", label:"Эрэмбэ",columnOption:{width:80,order:true}},
         {name:"title", label:"Гарчиг",columnOption:{order:true,align:"left"}},
-        {name:"i_state",label:"Төлөв",columnOption:{width:20,order:true}}
+        {name:"i_state",label:"Төлөв",columnOption:{width:60,order:true}}
     ],
     initialize:function (options){
         _.extend(this,options)
@@ -100,45 +100,61 @@ _.extend(List.prototype,{
         this.filter.addElement(CMSHml.HiddenField('sort_by', this.meta.sort_by))
         this.filter.addElement(CMSHml.HiddenField('current_page', this.meta.current_page))
         this.filter.addElement(CMSHml.HiddenField('total', this.meta.total))
+        this.fetch()
     },
+    
     setData:function(options){
         
     },
     setElement:function(){
         this.table=$('<table class="table table-striped table-bordered table-condensed"></table>')
         this.setHead()
+        return this.table
     },
     setHead:function(){
         var thead = $('<thead></thead>')
         var row = $('<tr></tr>')
         thead.append(row)
         this.table.append(thead)
-        for(var j = 0; j < d.attributes.length; ++j) {
+        row.append($('<th>#</th>').css('width',5))
+        for(var j in this.attributes) {
             //  create table column and append it
-            col = $('<th></th>');
+            var col = $('<th></th>');
             if(this.attributes[j].name == 'id') {
-                checkbox = $(document.createElement('input')).attr('type', 'checkbox').attr('id', 'checkAll');
-                col = $(document.createElement('th')).attr('width', 5);
+                checkbox = $('<span><input type="checkbox" id="checkAll" /><span>');
+                col.css('width',5)
                 col.append(checkbox);
             }
-            if(d.attributes[j].columnOption) {
-                if(!d.attributes[j].columnOption.align)
-                    d.attributes[j].columnOption.align = 'center'
-                col.css('text-align', d.attributes[j].columnOption.align)
-
-                if(d.attributes[j].columnOption.order) {
-                    links = $(document.createElement('a')).attr('href', '#').html(d.attributes[j].label).attr('id', d.attributes[j].name);
-                    if(d.attributes[j].name == d.sorting[0])
-                        links.attr('class', d.sorting[1]);
-                    if(d.attributes[j].columnOption.width != '')
-                        col.attr('width', d.attributes[j].columnOption.width);
+            if(this.attributes[j].columnOption) {
+                if(!this.attributes[j].columnOption.align)
+                    this.attributes[j].columnOption.align = 'center'
+                col.css('text-align', this.attributes[j].columnOption.align)
+                if(this.attributes[j].columnOption.order) {
+                    links = $('<a href="#" id="'+this.attributes[j].name+'">'+this.attributes[j].label+' <i></i></a>');
+                    if(this.attributes[j].name == this.meta.sort)
+                        links.find('i').addClass('icon-'+this.meta.sort_by);
+                    else links.find('i').addClass('icon-SORT');
+                    if(this.attributes[j].columnOption.width != '')
+                        col.css('width', this.attributes[j].columnOption.width);
                     col.append(links);
                 } else {
-                    col.html(d.attributes[j].label);
+                    col.html(this.attributes[j].label);
                 }
             }
             row.append(col);
         }
+    },
+    setBody:function(){
+        
+    },
+    fetch:function(options){
+        if(!options) options={}
+        if(!options.success){
+            options.success = function(){
+                alert(0)
+            }
+        }
+        this.collection.fetch(options)
     }
 })
 
@@ -158,7 +174,7 @@ _.extend(Filter.prototype,{
         for(name in this.elements){
             this.form.append(this.elements[name],' ')
         }
-        this.form.append(CMSHml.Button('Шүүх...'))
+        this.form.append($('<a href="#" class="btn"><i class="icon-search"></i> Шүүх...</a>'))
     },
     addElement:function(element){
         this.elements.push(element)
