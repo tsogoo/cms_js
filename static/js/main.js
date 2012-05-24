@@ -23,7 +23,7 @@ _.extend(View.prototype,{
             me.init_model({ action:options.action, params:options.url_params, success:function(){
                 me.render({template:options.template})
             }})
-        }, unsuccess:function(){ alert('error')}})
+        }, unsuccess:function(){ }})
     },
     init_template:function(options){
         if(!this.template_string){
@@ -89,10 +89,12 @@ var List = function(options) {
 }
 _.extend(List.prototype,{
     meta:{sort:'ordering', sort_by:'ASC', current_page:0, total:0},
-    attributes:[{name:"id"},
-        {name:"ordering", label:"Эрэмбэ",columnOption:{width:80,order:true}},
-        {name:"title", label:"Гарчиг",columnOption:{order:true,align:"left"}},
-        {name:"i_state",label:"Төлөв",columnOption:{width:60,order:true}}
+    attributes:[{name:"id",label:'<span><input type="checkbox" id="checkAll" /><span>',columnOption:{width:5},template:'<input type="checkbox" value="<%=id%>" name="ids" />'},
+        {name:"ordering", label:"Эрэмбэ",columnOption:{width:80,order:true},template:'<i class="icon-resize-vertical"></i>'},
+        {name:"title", label:"Гарчиг",columnOption:{width:180,order:true,align:"left"},template:'<a href="#news/edit/<%= id%>"><%= title%></a>'},
+        {name:"body",label:"Тайлбар",columnOption:{order:true, align:"left"},template:'<%=body%>'},
+        {name:"i_state",label:"Төлөв",columnOption:{width:60,order:true},template:'<i class="icon-<% if(state){%>ok<%}else{%>remove<%}%>"></i>'}
+        
     ],
     initialize:function (options){
         _.extend(this,options)
@@ -120,38 +122,48 @@ _.extend(List.prototype,{
         for(var j in this.attributes) {
             //  create table column and append it
             var col = $('<th></th>');
-            if(this.attributes[j].name == 'id') {
-                checkbox = $('<span><input type="checkbox" id="checkAll" /><span>');
-                col.css('width',5)
-                col.append(checkbox);
-            }
-            if(this.attributes[j].columnOption) {
-                if(!this.attributes[j].columnOption.align)
-                    this.attributes[j].columnOption.align = 'center'
-                col.css('text-align', this.attributes[j].columnOption.align)
-                if(this.attributes[j].columnOption.order) {
-                    links = $('<a href="#" id="'+this.attributes[j].name+'">'+this.attributes[j].label+' <i></i></a>');
-                    if(this.attributes[j].name == this.meta.sort)
-                        links.find('i').addClass('icon-'+this.meta.sort_by);
-                    else links.find('i').addClass('icon-SORT');
-                    if(this.attributes[j].columnOption.width != '')
-                        col.css('width', this.attributes[j].columnOption.width);
-                    col.append(links);
-                } else {
-                    col.html(this.attributes[j].label);
-                }
+            if(!this.attributes[j].columnOption.align)
+                this.attributes[j].columnOption.align = 'center'
+            col.css('text-align', this.attributes[j].columnOption.align)
+            if(this.attributes[j].columnOption.width)
+                col.css('width', this.attributes[j].columnOption.width)
+            if(this.attributes[j].columnOption.order) {
+                links = $('<a href="#" id="'+this.attributes[j].name+'">'+this.attributes[j].label+' <i></i></a>');
+                if(this.attributes[j].name == this.meta.sort)
+                    links.find('i').addClass('icon-'+this.meta.sort_by);
+                else links.find('i').addClass('icon-SORT');
+                col.append(links);
+            } else {
+                col.append(this.attributes[j].label);
             }
             row.append(col);
         }
     },
-    setBody:function(){
-        
+    setBody:function(models){
+        var rows =$('<tbody></tbody>')
+        for(var i in models){
+            rows.append(this.setRow(i, models[i]))
+        }
+        this.table.append(rows)
+    },
+    setRow:function(index, model){
+        var row=$('<tr></tr>')
+        row.append($('<td>'+index+'</td>').css('text-align','right'))
+        for(var i in this.attributes){
+            var cell=$('<td></td>').append(_.template(this.attributes[i].template, model.toJSON()))
+            if(this.attributes[i].columnOption.align)
+                cell.css('text-align', this.attributes[i].columnOption.align)
+            row.append(cell)
+        }
+        return row
     },
     fetch:function(options){
+        var me=this
         if(!options) options={}
         if(!options.success){
-            options.success = function(){
-                alert(0)
+            options.success = function(data){
+                me.setBody(data.models)
+                //for(var i in )
             }
         }
         this.collection.fetch(options)
